@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="gate_welcome_title">Stack</string>
+    <string name="gate_welcome_subtitle">Record your music</string>
+    <string name="gate_get_started">Get Started</string>
+
+    <string name="gate_media_access_title">Media Access</string>
+    <string name="gate_media_access_description">Stack needs access to your audio files to build your library.</string>
+    <string name="gate_grant_permission">Grant Permission</string>
+    <string name="gate_permission_denied">Permission is required to access your music files.</string>
+    <string name="gate_open_settings">Open Settings</string>
+
+    <string name="gate_notification_title">Notifications</string>
+    <string name="gate_notification_description">Allow notifications to control playback from the notification bar.</string>
+    <string name="gate_notification_skip">Skip</string>
+
+    <string name="gate_source_folder_title">Source Folder</string>
+    <string name="gate_source_folder_description">Select a folder containing your music files.</string>
+    <string name="gate_select_folder">Select Folder</string>
+    <string name="gate_folder_selected">%s selected</string>
+    <string name="gate_next">Next</string>
+
+    <string name="gate_scan_title">Scanning Library</string>
+    <string name="gate_scan_description">Discovering and indexing your music…</string>
+    <string name="gate_scan_progress">%1$d / %2$d files</string>
+    <string name="gate_scan_complete">Scan complete</string>
+    <string name="gate_scan_complete_count">%d tracks found</string>
+    <string name="gate_scan_failed">Scan failed</string>
+    <string name="gate_retry">Retry</string>
+    <string name="gate_finish">Done</string>
+</resources>
