@@ -158,6 +158,29 @@
     <string name="backup_success">Backup created successfully</string>
     <string name="restore_success">Backup restored successfully</string>
 
+    <!-- Mini Player -->
+    <string name="mini_player">Mini Player</string>
+
+    <!-- Library extras -->
+    <string name="no_tracks">No tracks found</string>
+    <string name="no_albums">No albums found</string>
+    <string name="no_artists">No artists found</string>
+    <string name="no_folders">No folders found</string>
+    <string name="tracks_count">%d tracks</string>
+    <string name="albums_count">%d albums</string>
+    <string name="play_all">Play All</string>
+    <string name="play_all_shuffled">Shuffle All</string>
+    <string name="go_back">Go back</string>
+    <string name="parent_folder">Parent folder</string>
+    <string name="collapse">Collapse</string>
+    <string name="more_options">More options</string>
+    <string name="go_to_album">Go to Album</string>
+    <string name="go_to_artist">Go to Artist</string>
+    <string name="track_info">Track Info</string>
+    <string name="edit_lyrics">Edit Lyrics</string>
+    <string name="notification_channel_playback">Playback</string>
+    <string name="notification_channel_description">Music playback controls</string>
+
     <!-- Accessibility -->
     <string name="cd_album_art">Album artwork</string>
     <string name="cd_play_pause">Play or pause</string>
