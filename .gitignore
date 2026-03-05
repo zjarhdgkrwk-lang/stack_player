@@ -1,0 +1,60 @@
+# ─── Gradle ───
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+# ─── IDE (Android Studio / IntelliJ) ───
+.idea/
+*.iml
+*.iws
+*.ipr
+.idea_modules/
+out/
+
+# 단, .idea/codeStyles 등 팀 공유 설정은 필요하면 허용
+# !.idea/codeStyles/
+
+# ─── Android / SDK ───
+local.properties
+*.apk
+*.aar
+*.ap_
+*.aab
+*.dex
+
+# ─── Signing ───
+*.jks
+*.keystore
+signing.properties
+
+# ─── Kotlin ───
+*.kotlin_module
+
+# ─── OS 생성 파일 ───
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# ─── 로그 / 크래시 ───
+*.log
+crash-reports/
+
+# ─── 테스트 결과 ───
+/test-results/
+/coverage/
+
+# ─── Room schema export (버전 관리 대상이므로 gitignore 하지 않음) ───
+# data/schemas/ 는 커밋합니다
+
+# ─── 기타 ───
+*.tmp
+*.bak
+*.swp
+*~
