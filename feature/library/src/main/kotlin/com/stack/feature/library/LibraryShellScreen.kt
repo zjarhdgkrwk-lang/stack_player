@@ -4,12 +4,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Label
+import androidx.compose.material.icons.automirrored.filled.PlaylistPlay
 import androidx.compose.material.icons.filled.Album
 import androidx.compose.material.icons.filled.Folder
 import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -49,6 +52,11 @@ fun LibraryShellScreen(
     onPlayPause: () -> Unit,
     onSkipNext: () -> Unit,
     onSkipPrevious: () -> Unit,
+    onTagsClick: () -> Unit = {},
+    onPlaylistsClick: () -> Unit = {},
+    isFavorite: Boolean = false,
+    onToggleFavorite: () -> Unit = {},
+    onPlayNext: ((Track) -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     var selectedTab by rememberSaveable { mutableIntStateOf(0) }
@@ -57,7 +65,15 @@ fun LibraryShellScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(text = stringResource(R.string.library)) }
+                title = { Text(text = stringResource(R.string.library)) },
+                actions = {
+                    IconButton(onClick = onTagsClick) {
+                        Icon(Icons.AutoMirrored.Filled.Label, contentDescription = stringResource(R.string.tags))
+                    }
+                    IconButton(onClick = onPlaylistsClick) {
+                        Icon(Icons.AutoMirrored.Filled.PlaylistPlay, contentDescription = stringResource(R.string.playlists))
+                    }
+                }
             )
         },
         bottomBar = {
@@ -66,10 +82,12 @@ fun LibraryShellScreen(
                 if (!isExpanded && playbackState.currentTrack != null) {
                     MiniPlayer(
                         state = playbackState,
+                        isFavorite = isFavorite,
                         onTap = onMiniPlayerTap,
                         onPlayPause = onPlayPause,
                         onSkipNext = onSkipNext,
-                        onSkipPrevious = onSkipPrevious
+                        onSkipPrevious = onSkipPrevious,
+                        onToggleFavorite = onToggleFavorite
                     )
                 }
 
@@ -90,6 +108,7 @@ fun LibraryShellScreen(
         when (tabs[selectedTab]) {
             LibraryTab.TRACKS -> TracksTab(
                 onTrackClick = onTrackClick,
+                onPlayNext = onPlayNext,
                 modifier = Modifier.padding(padding)
             )
             LibraryTab.ALBUMS -> AlbumsTab(

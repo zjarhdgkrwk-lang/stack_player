@@ -75,6 +75,21 @@ class PlaylistRepositoryImpl @Inject constructor(
     }
 
     override suspend fun reorderPlaylistTrack(playlistId: Long, fromIndex: Int, toIndex: Int) {
-        // TODO: Full reorder implementation — fetch all cross refs, reindex, and batch update
+        val crossRefs = playlistDao.getPlaylistTrackCrossRefsList(playlistId)
+            .sortedBy { it.orderIndex }
+            .toMutableList()
+
+        if (fromIndex < 0 || fromIndex >= crossRefs.size || toIndex < 0 || toIndex >= crossRefs.size) return
+
+        val item = crossRefs.removeAt(fromIndex)
+        crossRefs.add(toIndex, item)
+
+        crossRefs.forEachIndexed { index, crossRef ->
+            playlistDao.updateOrderIndex(crossRef.playlistId, crossRef.trackId, index)
+        }
+    }
+
+    override suspend fun getMaxOrderIndex(playlistId: Long): Int {
+        return playlistDao.getMaxOrderIndex(playlistId)
     }
 }

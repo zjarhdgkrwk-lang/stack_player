@@ -69,4 +69,12 @@ class TagRepositoryImpl @Inject constructor(
     override suspend fun isTrackTagged(trackId: Long, tagId: Long): Boolean {
         return tagDao.isTrackTagged(trackId, tagId) > 0
     }
+
+    override suspend fun clearTagTracks(tagId: Long) {
+        tagDao.clearTagTracks(tagId)
+    }
+
+    override suspend fun getTrackIdsForTag(tagId: Long): List<Long> {
+        return tagDao.getTrackIdsForTag(tagId)
+    }
 }

@@ -14,4 +14,5 @@ interface PlaylistRepository {
     suspend fun addTrackToPlaylist(playlistId: Long, trackId: Long, orderIndex: Int)
     suspend fun removeTrackFromPlaylist(playlistId: Long, trackId: Long)
     suspend fun reorderPlaylistTrack(playlistId: Long, fromIndex: Int, toIndex: Int)
+    suspend fun getMaxOrderIndex(playlistId: Long): Int
 }

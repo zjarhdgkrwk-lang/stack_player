@@ -17,7 +17,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.stack.core.player.PlaybackState
 import com.stack.domain.model.Track
 import com.stack.domain.model.enums.ShuffleMode
 import com.stack.feature.gate.GateScreen
@@ -25,9 +24,15 @@ import com.stack.feature.library.AlbumDetailScreen
 import com.stack.feature.library.ArtistDetailScreen
 import com.stack.feature.library.LibraryShellScreen
 import com.stack.feature.library.TracksViewModel
+import com.stack.feature.library.components.AddToPlaylistDialog
+import com.stack.feature.library.components.AssignTagDialog
 import com.stack.feature.player.NowPlayingScreen
 import com.stack.feature.player.PlaybackViewModel
 import com.stack.feature.player.QueueSheet
+import com.stack.feature.playlists.PlaylistDetailScreen
+import com.stack.feature.playlists.PlaylistsScreen
+import com.stack.feature.tags.TagDetailScreen
+import com.stack.feature.tags.TagsScreen
 
 @Composable
 fun StackNavHost(
@@ -36,6 +41,8 @@ fun StackNavHost(
     val navController = rememberNavController()
     val playbackViewModel: PlaybackViewModel = hiltViewModel()
     val playbackState by playbackViewModel.playbackState.collectAsStateWithLifecycle()
+    val isFavorite by playbackViewModel.isFavorite.collectAsStateWithLifecycle()
+    val contextMenuState by playbackViewModel.contextMenuState.collectAsStateWithLifecycle()
 
     // All tracks for folders tab (shared)
     val tracksViewModel: TracksViewModel = hiltViewModel()
@@ -59,6 +66,12 @@ fun StackNavHost(
             playbackViewModel.play(tracks.first(), tracks, 0)
         }
     }
+
+    // Shared context menu handlers for detail screens
+    val onPlayNext: (Track) -> Unit = { track -> playbackViewModel.addNext(track) }
+    val onAddToPlaylist: (Track) -> Unit = { track -> playbackViewModel.showPlaylistPicker(track) }
+    val onAssignTag: (Track) -> Unit = { track -> playbackViewModel.showTagAssigner(track) }
+    val onToggleFavoriteForTrack: (Track) -> Unit = { track -> playbackViewModel.toggleFavoriteForTrack(track) }
 
     NavHost(
         navController = navController,
@@ -94,6 +107,11 @@ fun StackNavHost(
                         onPlayPause = { playbackViewModel.togglePlayPause() },
                         onSkipNext = { playbackViewModel.skipNext() },
                         onSkipPrevious = { playbackViewModel.skipPrevious() },
+                        onTagsClick = { navController.navigate(NavRoute.Tags.route) },
+                        onPlaylistsClick = { navController.navigate(NavRoute.Playlists.route) },
+                        isFavorite = isFavorite,
+                        onToggleFavorite = { playbackViewModel.toggleFavorite() },
+                        onPlayNext = onPlayNext,
                         modifier = Modifier
                             .fillMaxHeight()
                             .fillMaxWidth(0.5f)
@@ -101,7 +119,7 @@ fun StackNavHost(
                     // Right pane - NowPlaying always visible
                     NowPlayingScreen(
                         state = playbackState,
-                        isFavorite = false,
+                        isFavorite = isFavorite,
                         onCollapse = { },
                         onPlayPause = { playbackViewModel.togglePlayPause() },
                         onSkipNext = { playbackViewModel.skipNext() },
@@ -109,7 +127,7 @@ fun StackNavHost(
                         onSeek = { playbackViewModel.seekTo(it) },
                         onToggleShuffle = { playbackViewModel.toggleShuffle() },
                         onToggleRepeat = { playbackViewModel.toggleRepeatMode() },
-                        onToggleFavorite = { },
+                        onToggleFavorite = { playbackViewModel.toggleFavorite() },
                         onOpenQueue = { showQueue = true },
                         modifier = Modifier
                             .fillMaxHeight()
@@ -135,7 +153,12 @@ fun StackNavHost(
                     },
                     onPlayPause = { playbackViewModel.togglePlayPause() },
                     onSkipNext = { playbackViewModel.skipNext() },
-                    onSkipPrevious = { playbackViewModel.skipPrevious() }
+                    onSkipPrevious = { playbackViewModel.skipPrevious() },
+                    onTagsClick = { navController.navigate(NavRoute.Tags.route) },
+                    onPlaylistsClick = { navController.navigate(NavRoute.Playlists.route) },
+                    isFavorite = isFavorite,
+                    onToggleFavorite = { playbackViewModel.toggleFavorite() },
+                    onPlayNext = onPlayNext
                 )
             }
         }
@@ -143,7 +166,7 @@ fun StackNavHost(
         composable(NavRoute.NowPlaying.route) {
             NowPlayingScreen(
                 state = playbackState,
-                isFavorite = false,
+                isFavorite = isFavorite,
                 onCollapse = { navController.popBackStack() },
                 onPlayPause = { playbackViewModel.togglePlayPause() },
                 onSkipNext = { playbackViewModel.skipNext() },
@@ -151,7 +174,7 @@ fun StackNavHost(
                 onSeek = { playbackViewModel.seekTo(it) },
                 onToggleShuffle = { playbackViewModel.toggleShuffle() },
                 onToggleRepeat = { playbackViewModel.toggleRepeatMode() },
-                onToggleFavorite = { },
+                onToggleFavorite = { playbackViewModel.toggleFavorite() },
                 onOpenQueue = { showQueue = true }
             )
         }
@@ -164,7 +187,11 @@ fun StackNavHost(
                 onBack = { navController.popBackStack() },
                 onTrackClick = onTrackClick,
                 onPlayAll = onPlayAll,
-                onShuffleAll = onShuffleAll
+                onShuffleAll = onShuffleAll,
+                onPlayNext = onPlayNext,
+                onAddToPlaylist = onAddToPlaylist,
+                onAssignTag = onAssignTag,
+                onToggleFavorite = onToggleFavoriteForTrack
             )
         }
 
@@ -176,9 +203,66 @@ fun StackNavHost(
                 onBack = { navController.popBackStack() },
                 onTrackClick = onTrackClick,
                 onPlayAll = onPlayAll,
-                onShuffleAll = onShuffleAll
+                onShuffleAll = onShuffleAll,
+                onPlayNext = onPlayNext,
+                onAddToPlaylist = onAddToPlaylist,
+                onAssignTag = onAssignTag,
+                onToggleFavorite = onToggleFavoriteForTrack
             )
         }
+
+        composable(NavRoute.Tags.route) {
+            TagsScreen(
+                onBack = { navController.popBackStack() },
+                onTagClick = { tagId -> navController.navigate("tag/$tagId") }
+            )
+        }
+
+        composable(
+            route = NavRoute.TagDetail.route,
+            arguments = listOf(navArgument("tagId") { type = NavType.LongType })
+        ) {
+            TagDetailScreen(
+                onBack = { navController.popBackStack() },
+                onTrackClick = onTrackClick
+            )
+        }
+
+        composable(NavRoute.Playlists.route) {
+            PlaylistsScreen(
+                onBack = { navController.popBackStack() },
+                onPlaylistClick = { playlistId -> navController.navigate("playlist/$playlistId") }
+            )
+        }
+
+        composable(
+            route = NavRoute.PlaylistDetail.route,
+            arguments = listOf(navArgument("playlistId") { type = NavType.LongType })
+        ) {
+            PlaylistDetailScreen(
+                onBack = { navController.popBackStack() },
+                onTrackClick = onTrackClick,
+                onPlayAll = onPlayAll
+            )
+        }
+    }
+
+    // Shared context menu dialogs
+    if (contextMenuState.showPlaylistPicker) {
+        AddToPlaylistDialog(
+            playlists = contextMenuState.playlists,
+            onDismiss = { playbackViewModel.dismissPlaylistPicker() },
+            onPlaylistSelected = { playbackViewModel.addTrackToPlaylist(it) }
+        )
+    }
+
+    if (contextMenuState.showTagAssigner) {
+        AssignTagDialog(
+            tags = contextMenuState.allTags,
+            assignedTagIds = contextMenuState.contextTrackTagIds,
+            onDismiss = { playbackViewModel.dismissTagAssigner() },
+            onToggleTag = { playbackViewModel.toggleTrackTag(it) }
+        )
     }
 
     // Queue sheet overlay

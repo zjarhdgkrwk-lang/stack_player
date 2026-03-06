@@ -31,6 +31,13 @@ interface PlaylistDao {
     """)
     fun getPlaylistTrackCrossRefs(playlistId: Long): Flow<List<PlaylistTrackCrossRef>>
 
+    @Query("""
+        SELECT * FROM playlist_track_cross_ref
+        WHERE playlistId = :playlistId
+        ORDER BY orderIndex ASC
+    """)
+    suspend fun getPlaylistTrackCrossRefsList(playlistId: Long): List<PlaylistTrackCrossRef>
+
     @Query("SELECT * FROM playlists WHERE id = :id")
     suspend fun getPlaylistById(id: Long): PlaylistEntity?
 

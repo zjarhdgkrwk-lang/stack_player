@@ -64,6 +64,35 @@
     <string name="year_asc">Year (Oldest)</string>
     <string name="year_desc">Year (Newest)</string>
 
+    <!-- Tags -->
+    <string name="tags">Tags</string>
+    <string name="create_tag">Create Tag</string>
+    <string name="edit_tag">Edit Tag</string>
+    <string name="tag_name">Tag Name</string>
+    <string name="tag_color">Tag Color</string>
+    <string name="assign_tag">Assign Tag</string>
+    <string name="save">Save</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
+    <!-- Playlists -->
+    <string name="playlists">Playlists</string>
+    <string name="create_playlist">Create Playlist</string>
+    <string name="edit_playlist">Edit Playlist</string>
+    <string name="playlist_name">Playlist Name</string>
+    <string name="playlist_description">Description</string>
+    <string name="add_tracks">Add Tracks</string>
+
+    <!-- Tags / Playlists extras -->
+    <string name="no_playlists">No playlists</string>
+    <string name="no_tags">No tags</string>
+    <string name="select_tags">Select Tags</string>
+
+    <!-- Tags filter -->
+    <string name="tag_filter_and">Match ALL tags</string>
+    <string name="tag_filter_or">Match ANY tag</string>
+    <string name="clear_all">Clear All</string>
+
     <!-- Accessibility -->
     <string name="cd_album_art">Album artwork</string>
     <string name="cd_play_pause">Play or pause</string>

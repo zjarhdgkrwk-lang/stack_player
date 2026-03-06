@@ -52,4 +52,13 @@ interface TagDao {
 
     @Query("SELECT COUNT(*) FROM track_tag_cross_ref WHERE trackId = :trackId AND tagId = :tagId")
     suspend fun isTrackTagged(trackId: Long, tagId: Long): Int
+
+    @Query("DELETE FROM track_tag_cross_ref WHERE tagId = :tagId")
+    suspend fun clearTagTracks(tagId: Long)
+
+    @Query("SELECT trackId FROM track_tag_cross_ref WHERE tagId = :tagId")
+    suspend fun getTrackIdsForTag(tagId: Long): List<Long>
+
+    @Query("SELECT COUNT(*) FROM track_tag_cross_ref WHERE tagId = :tagId")
+    suspend fun getTrackCountForTag(tagId: Long): Int
 }

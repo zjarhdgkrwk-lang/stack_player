@@ -181,6 +181,15 @@
     <string name="notification_channel_playback">Playback</string>
     <string name="notification_channel_description">Music playback controls</string>
 
+    <!-- Tags / Playlists extras -->
+    <string name="tag_filter">Filter by Tag</string>
+    <string name="tag_filter_and">Match ALL tags</string>
+    <string name="tag_filter_or">Match ANY tag</string>
+    <string name="no_playlists">No playlists</string>
+    <string name="no_tags">No tags</string>
+    <string name="select_tags">Select Tags</string>
+    <string name="track_actions">Track Actions</string>
+
     <!-- Accessibility -->
     <string name="cd_album_art">Album artwork</string>
     <string name="cd_play_pause">Play or pause</string>

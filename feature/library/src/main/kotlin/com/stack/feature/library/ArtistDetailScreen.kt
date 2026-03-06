@@ -43,6 +43,10 @@ fun ArtistDetailScreen(
     onTrackClick: (Track, List<Track>, Int) -> Unit,
     onPlayAll: (List<Track>) -> Unit,
     onShuffleAll: (List<Track>) -> Unit,
+    onPlayNext: ((Track) -> Unit)? = null,
+    onAddToPlaylist: ((Track) -> Unit)? = null,
+    onAssignTag: ((Track) -> Unit)? = null,
+    onToggleFavorite: ((Track) -> Unit)? = null,
     modifier: Modifier = Modifier,
     viewModel: ArtistDetailViewModel = hiltViewModel()
 ) {
@@ -106,7 +110,11 @@ fun ArtistDetailScreen(
                     onClick = {
                         val index = state.tracks.indexOf(track)
                         onTrackClick(track, state.tracks, index)
-                    }
+                    },
+                    onPlayNext = onPlayNext,
+                    onAddToPlaylist = onAddToPlaylist,
+                    onAssignTag = onAssignTag,
+                    onToggleFavorite = onToggleFavorite
                 )
             }
         }

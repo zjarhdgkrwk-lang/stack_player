@@ -17,4 +17,6 @@ interface TagRepository {
     suspend fun assignTagToTrack(trackId: Long, tagId: Long)
     suspend fun removeTagFromTrack(trackId: Long, tagId: Long)
     suspend fun isTrackTagged(trackId: Long, tagId: Long): Boolean
+    suspend fun clearTagTracks(tagId: Long)
+    suspend fun getTrackIdsForTag(tagId: Long): List<Long>
 }
